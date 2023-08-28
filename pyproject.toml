@@ -1,0 +1,37 @@
+[tool.poetry]
+name = "todo"
+version = "0.1.0"
+description = ""
+authors = ["William <wosteimer1@gmail.com>"]
+readme = "README.md"
+packages = [{include = "todo", from = "src"}]
+
+[tool.pytest.ini_options]
+pythonpath = "src"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+uvicorn = "^0.23.2"
+starlette = "^0.31.0"
+jinja2 = "^3.1.2"
+python-multipart = "^0.0.6"
+aiosqlite = "^0.19.0"
+aiofiles = "^23.2.1"
+
+[tool.taskipy.tasks]
+dev = "uvicorn todo:main --reload --factory" 
+test-watch = "ptw -- -s -x --cov=src -vv"
+
+[tool.poetry.group.dev.dependencies]
+taskipy = "^1.12.0"
+pytest = "^7.4.0"
+pytest-watch = "^4.2.0"
+pytest-sugar = "^0.9.7"
+pytest-cov = "^4.1.0"
+black = "^23.7.0"
+isort = "^5.12.0"
+pytest-asyncio = "^0.21.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

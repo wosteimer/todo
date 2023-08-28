@@ -1,0 +1,243 @@
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+  list-style: none;
+}
+
+:root {
+  --backgroud: #fafafa;
+  --secondary-backgroud: #ffffff;
+  --on-backgroud: #323232;
+  --primary: #3584e4;
+  --primary-hover: #1b68c5;
+  --on-primary: #fafafa;
+  --border: rgba(50, 50, 50, 0.15);
+  --hover: rgba(27, 104, 197, 0.4);
+  --red: #f66151;
+  --green: #26a269;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  background-color: var(--backgroud);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  max-width: 32rem;
+  height: 72rem;
+  background-color: var(--secondary-backgroud);
+  margin: auto;
+  border: var(--border) 0.1rem solid;
+  border-radius: 0.8rem;
+}
+
+header {
+  border-bottom: var(--border) 0.1rem solid;
+}
+
+header form {
+  display: flex;
+  width: 100%;
+  padding: 1.6rem 1.2rem;
+}
+
+.submit-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  border-radius: 0 0.4rem 0.4rem 0;
+  cursor: pointer;
+  background-color: var(--primary);
+  width: 12.8rem;
+  height: 3.2rem;
+  transition: background-color 250ms;
+}
+
+.submit-button.htmx-request {
+  background-color: var(--hover);
+  pointer-events: none;
+}
+
+.submit-button:hover {
+  background-color: var(--primary-hover);
+}
+
+header input {
+  width: 100%;
+  height: 3.2rem;
+  border: var(--border) 0.1rem solid;
+  border-right: none;
+  border-radius: 0.4rem 0 0 0.4rem;
+  padding-left: 1.6rem;
+  background-color: var(--backgroud);
+  color: var(--on-backgroud);
+}
+
+header input:focus {
+  border: var(--hover) 0.1rem solid;
+  border-right: none;
+  outline: none;
+}
+
+main {
+  height: 100%;
+  padding-top: 0.8rem;
+  overflow-y: scroll;
+}
+
+ul {
+  position: relative;
+  display: flex;
+  height: 3.2rem;
+  align-items: center;
+  padding: 0 2rem;
+  color: var(--on-backgroud);
+}
+
+ul:hover {
+  font-weight: 700;
+  background-color: var(--hover);
+  color: var(--on-primary);
+}
+
+.remove-button {
+  color: var(--on-backgroud);
+  cursor: pointer;
+  background: none;
+}
+ul:hover .remove-button {
+  color: var(--on-primary);
+}
+ul:hover .remove-button:hover {
+  color: var(--red);
+}
+
+.todo-content p {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  font-size: 1.4rem;
+}
+
+footer {
+  font-size: 1.2rem;
+  align-items: center;
+  color: var(--on-backgroud);
+  border-top: var(--border) 0.1rem solid;
+  height: 5.6rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.8;
+}
+
+.fa-heart {
+  color: var(--red);
+  padding: 0 0.4rem;
+}
+
+footer a {
+  padding-left: 0.4rem;
+  color: var(--primary);
+}
+
+.todo-loading {
+  left: 0;
+  top: 0;
+  width: 100%;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  background-color: var(--hover);
+  transition: opacity 250ms;
+  pointer-events: none;
+}
+
+.todo-loading img {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.todo-content {
+  user-select: none;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.htmx-request + .todo-content {
+  display: none;
+}
+
+.indicator {
+  display: none;
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.fa-square {
+  padding-right: 0.8rem;
+  color: var(--on-backgroud);
+  font-size: 1.4rem;
+}
+
+ul:hover .fa-square {
+  color: var(--on-primary);
+}
+
+.fa-square-check {
+  padding-right: 0.8rem;
+  color: var(--green);
+  font-size: 1.4rem;
+}
+
+.htmx-request .indicator {
+  display: inline;
+}
+
+.submit-button-content {
+  color: var(--on-primary);
+  display: inline;
+}
+
+.htmx-request .submit-button-content {
+  display: none;
+}
+
+@media (max-height: 720px) {
+  .container {
+    height: 100%;
+    border-radius: 0;
+  }
+}
+
+@media (max-width: 320px) {
+  .container {
+    border-radius: 0;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --backgroud: #242424;
+    --secondary-backgroud: #353535;
+    --on-backgroud: #fafafa;
+    --border: rgba(250, 250, 250, 0.15);
+  }
+}

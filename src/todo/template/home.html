@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Todo App{% endblock %}
+{% block content %}
+<div class="container">
+  <header>
+    <form 
+        hx-post="{{ url_for('add') }}" 
+        hx-target="#todo-list" hx-swap="beforeend" 
+        hx-indicator="#button"
+        hx-ext="disable-element" 
+        hx-disable-element="#button"
+    >
+        <input 
+            required type="text" 
+            name="text" placeholder="Tem algo a fazer?" 
+            autocomplete="off"
+            maxlength="24" 
+        /><button 
+            class="submit-button" 
+            id="button" 
+            type="submit"
+        >
+            <img class="htmx-indicator indicator" src="{{ url_for('static', path='/spinner.svg') }}">
+            <span class="submit-button-content">Adicionar</span>
+        </button>
+    </form>
+  </header>
+  <main>
+    <li id="todo-list">
+      {%for id, todo in todos %} {%include "todo_item.html" %} {% endfor %}
+    </li>
+  </main>
+  <footer>
+    feito com
+    <i class="fa-solid fa-heart"></i>
+    por
+    <a href='https://wosteimer.github.io/my-links' target='_blank' />@decadente</a>
+  </footer>
+</div>
+{% endblock %}
