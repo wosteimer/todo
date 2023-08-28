@@ -74,7 +74,7 @@ header form {
   background-color: var(--primary-hover);
 }
 
-header input {
+header form input {
   width: 100%;
   height: 3.2rem;
   border: 0.1rem solid var(--border);
@@ -85,7 +85,7 @@ header input {
   color: var(--on-backgroud);
 }
 
-header input:focus {
+header form input:focus {
   border: 0.1rem solid var(--hover);
   border-right: none;
   outline: none;
