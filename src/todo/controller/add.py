@@ -25,9 +25,7 @@ class AddController(Controller[Request, Response]):
     async def perform(self, request: Request) -> Response:
         form = await request.form()
         match form.get("text"):
-            case "":
-                return Response(status_code=400)
-            case str(value):
+            case str(value) if value != "":
                 text = value
             case _:
                 return Response(status_code=400)

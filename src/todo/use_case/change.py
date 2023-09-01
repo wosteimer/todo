@@ -1,9 +1,7 @@
-from dataclasses import replace
-from datetime import datetime
 from typing import Optional
 
 from ..entity import Entity
-from ..entity.todo import Todo
+from ..entity.todo import Todo, set_its_done
 from ..repository import Repository
 
 
@@ -23,13 +21,9 @@ class ChangeUsecase:
                 return
 
             case entity:
-                updated_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                new_todo = replace(
-                    entity.data,
-                    its_done=not entity.data.its_done,
-                    updated_at=updated_at,
+                new_entity = Entity.create(
+                    set_its_done(entity.data, not entity.data.its_done), id=entity.id
                 )
-                new_entity = Entity.create(new_todo, id=id)
                 await self.__todo_repository.save(new_entity)
 
                 return new_entity
