@@ -20,15 +20,15 @@
             id="button" 
             type="submit"
         >
-            <img class="htmx-indicator indicator" src="{{ url_for('static', path='/spinner.svg') }}">
+            <img class="htmx-indicator indicator" src="{{ url_for('static', path='/spinner.svg') }}" alt="Carregando" />
             <span class="submit-button-content">Adicionar</span>
         </button>
     </form>
   </header>
   <main>
-    <li id="todo-list">
+    <ul id="todo-list">
       {%for id, todo in todos %} {%include "todo_item.html" %} {% endfor %}
-    </li>
+    </ul>
   </main>
   <footer>
     feito com

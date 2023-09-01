@@ -7,6 +7,7 @@
 }
 
 :root {
+  color-scheme: light;
   --backgroud: #fafafa;
   --secondary-backgroud: #ffffff;
   --on-backgroud: #323232;
@@ -97,7 +98,7 @@ main {
   overflow-y: scroll;
 }
 
-ul {
+li {
   position: relative;
   display: flex;
   height: 3.2rem;
@@ -106,7 +107,7 @@ ul {
   color: var(--on-backgroud);
 }
 
-ul:hover {
+li:hover {
   font-weight: 700;
   background-color: var(--hover);
   color: var(--on-primary);
@@ -117,10 +118,10 @@ ul:hover {
   cursor: pointer;
   background: none;
 }
-ul:hover .remove-button {
+li:hover .remove-button {
   color: var(--on-primary);
 }
-ul:hover .remove-button:hover {
+li:hover .remove-button:hover {
   color: var(--red);
 }
 
@@ -158,7 +159,7 @@ footer a {
   left: 0;
   top: 0;
   width: 100%;
-  display: flex;
+  display: none;
   height: 100%;
   justify-content: center;
   align-items: center;
@@ -167,7 +168,9 @@ footer a {
   transition: opacity 250ms;
   pointer-events: none;
 }
-
+.todo-loading.htmx-request {
+  display: flex;
+}
 .todo-loading img {
   width: 1.6rem;
   height: 1.6rem;
@@ -197,7 +200,7 @@ footer a {
   font-size: 1.4rem;
 }
 
-ul:hover .fa-square {
+li:hover .fa-square {
   color: var(--on-primary);
 }
 
@@ -235,6 +238,7 @@ ul:hover .fa-square {
 
 @media (prefers-color-scheme: dark) {
   :root {
+    color-scheme: dark;
     --backgroud: #242424;
     --secondary-backgroud: #353535;
     --on-backgroud: #fafafa;

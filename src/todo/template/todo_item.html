@@ -1,6 +1,6 @@
-<ul id="todo-{{ id }}">
+<li id="todo-{{ id }}">
   <div id="indicator-{{ id }}" class="htmx-indicator todo-loading">
-    <img src="{{ url_for('static', path='bars.svg') }}" />
+    <img src="{{ url_for('static', path='bars.svg') }}" alt="Carregando" />
   </div>
   <div class="todo-content">
     <p
@@ -23,8 +23,9 @@
       hx-target="#todo-{{id}}"
       hx-indicator="#indicator-{{id}}"
       hx-swap="delete"
+      title="delete"
     >
       <i class="fa-solid fa-trash"></i>
     </button>
   </div>
-</ul>
+</li>
