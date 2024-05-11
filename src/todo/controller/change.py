@@ -1,23 +1,19 @@
 from starlette.requests import Request
 from starlette.responses import HTMLResponse, Response
-from starlette.templating import Jinja2Templates
 
 from ..entity.todo import Todo
 from ..repository.repository import Repository
 from ..use_case.change import ChangeUsecase
 from .controller import Controller
+from ..template.todo import Todo as HTMLTodo
 
 
 class ChangeController(Controller[Request, Response]):
-    __template: Jinja2Templates
     __use_case: ChangeUsecase
 
     @classmethod
-    def create(
-        cls, template: Jinja2Templates, repository: Repository[Todo]
-    ) -> "ChangeController":
+    def create(cls, repository: Repository[Todo]) -> "ChangeController":
         controller = cls()
-        controller.__template = template
         controller.__use_case = ChangeUsecase.create(repository)
 
         return controller
@@ -28,9 +24,12 @@ class ChangeController(Controller[Request, Response]):
             case None:
                 return HTMLResponse(status_code=400)
             case entity:
-                return self.__template.TemplateResponse(
-                    request,
-                    "todo_item.html",
-                    {"id": entity.id, "todo": entity.data},
-                    status_code=200,
+                html = HTMLTodo(
+                    id=entity.id,
+                    url_for_bars=str(request.url_for("static", path="bars.svg")),
+                    url_for_change=str(request.url_for("change", id=entity.id)),
+                    url_for_remove=str(request.url_for("remove", id=entity.id)),
+                    its_done=entity.data.its_done,
+                    content=entity.data.text,
                 )
+                return HTMLResponse("<!doctype html>\n" + html.build())
