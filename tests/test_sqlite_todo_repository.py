@@ -40,6 +40,14 @@ async def test_case_1(repository: SqliteTodoRepository):
     input = Todo.create("Test Todo")
     await repository.save(input)
 
+    output, _ = await repository.get(input.id)
+
+    assert output.id == input.id
+    assert output.content == input.content
+    assert output.its_done == input.its_done
+    assert output.created_at == input.created_at
+    assert output.updated_at == input.updated_at
+
 
 @pytest.mark.asyncio
 async def test_case_2(repository: SqliteTodoRepository):

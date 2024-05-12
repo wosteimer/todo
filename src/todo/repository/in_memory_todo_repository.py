@@ -3,8 +3,8 @@ from datetime import datetime
 from typing import override
 from uuid import UUID
 
-from todo.entity.todo import Todo
-from todo.repository.todo_repository import Result, TodoNotFoundError, TodoRepository
+from ..entity.todo import Todo
+from ..repository.todo_repository import Result, TodoNotFoundError, TodoRepository
 
 
 class InMemoryTodoRepository(TodoRepository):

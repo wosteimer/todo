@@ -32,7 +32,11 @@ class UpdateTodo:
                 "content": "",
                 "its_done": False,
             }, err
-        updated_todo = todo.update(**input)
+        content, its_done = (
+            input.get("content", todo.content),
+            input.get("its_done", todo.its_done),
+        )
+        updated_todo = todo.update(content=content, its_done=its_done)
         await self.__todos.save(updated_todo)
         return {
             "id": updated_todo.id,
