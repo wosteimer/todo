@@ -12,11 +12,8 @@ async def test_case_1():
     for i in range(3):
         todo = Todo.create(f"Test Todo {i}")
         await todos.save(todo)
-
     case = ShowTodos(todos)
-
     output = await case.perform()
-
     assert len(output) == 3
     assert output[0]["content"] == "Test Todo 0"
     assert output[1]["content"] == "Test Todo 1"

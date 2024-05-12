@@ -5,18 +5,18 @@ from typing import TypedDict, Unpack
 class TodoProps(TypedDict):
     id: str
     url_for_bars: str
-    url_for_change: str
-    url_for_remove: str
+    url_for_update_todo: str
+    url_for_delete_todo: str
     its_done: bool
     content: str
 
 
 def Todo(**props: Unpack[TodoProps]):
-    id, url_for_bars, url_for_change, url_for_remove, its_done, content = (
+    id, url_for_bars, url_for_update_todo, url_for_delete_todo, its_done, content = (
         props["id"],
         props["url_for_bars"],
-        props["url_for_change"],
-        props["url_for_remove"],
+        props["url_for_update_todo"],
+        props["url_for_delete_todo"],
         props["its_done"],
         props["content"],
     )
@@ -27,12 +27,11 @@ def Todo(**props: Unpack[TodoProps]):
         ]),
         Div(classes=["todo-content"], children=[
             P(      
-            hx_put=url_for_change,
+            hx_patch=url_for_update_todo,
             hx_target=f"#todo-{id}",
             hx_swap="outerHTML",
             hx_indicator=f"#indicator-{id}",
-            name="its_done",
-            value=str(its_done).lower(), 
+            hx_vals = f"js:{{its_done: !{str(its_done).lower()}}}",
             children=[
                 I(classes=["fa-regular", "fa-solid", "fa-square-check"]) if its_done 
                 else 
@@ -42,7 +41,7 @@ def Todo(**props: Unpack[TodoProps]):
             ),
             Button(      
             classes=["remove-button"],
-            hx_delete=url_for_remove,
+            hx_delete=url_for_delete_todo,
             hx_target=f"#todo-{id}",
             hx_indicator=f"#indicator-{id}",
             hx_swap="delete",

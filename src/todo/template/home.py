@@ -21,15 +21,15 @@ from todo.template.todo import Todo, TodoProps
 
 class HomeProps(TypedDict):
     url_for_style: str
-    url_for_add: str
+    url_for_create_todo: str
     url_for_spinner: str
     todos: Sequence[TodoProps]
 
 
 def Home(**props: Unpack[HomeProps]) -> Tag:
-    url_for_style, url_for_add, url_for_spinner, todos = (
+    url_for_style, url_for_create_todo, url_for_spinner, todos = (
         props["url_for_style"],
-        props["url_for_add"],
+        props["url_for_create_todo"],
         props["url_for_spinner"],
         props["todos"],
     )
@@ -37,7 +37,7 @@ def Home(**props: Unpack[HomeProps]) -> Tag:
     return Base(title="Todo App", url_for_style=url_for_style, children=[
         Div(classes=["container"], children=[
             Header([Form(
-                hx_post=url_for_add, 
+                hx_post=url_for_create_todo, 
                 hx_target="#todo-list", 
                 hx_swap="beforeend",
                 hx_indicator="#button",
@@ -47,7 +47,7 @@ def Home(**props: Unpack[HomeProps]) -> Tag:
                     Input(
                         required=True,
                         type="text",
-                        name="text", 
+                        name="content", 
                         placeholder="Tem algo a fazer?",
                         autocomplete="off",
                         maxlength=24, 

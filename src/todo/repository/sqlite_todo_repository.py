@@ -101,7 +101,8 @@ class SqliteTodoRepository(TodoRepository):
         result: list[Todo] = []
         async with aiosqlite.connect(self.__db_path) as db:
             async with db.execute(
-                "SELECT * FROM todo\n" "ORDER BY created_at;\n",
+                "SELECT id, content, its_done, created_at, updated_at FROM todo\n"
+                "ORDER BY created_at;\n",
             ) as cursor:
                 async for row in cursor:
                     id, content, its_done, created_at, updated_at = row
