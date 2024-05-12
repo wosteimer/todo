@@ -1,5 +1,6 @@
 from collections.abc import Sequence
 from pathlib import Path
+from typing import override
 from uuid import UUID
 from datetime import datetime
 import aiosqlite
@@ -13,6 +14,7 @@ class SqliteTodoRepository(TodoRepository):
     def __init__(self, db_path: Path | str) -> None:
         self.__db_path = db_path
 
+    @override
     async def save(self, todo: Todo) -> None:
         async with aiosqlite.connect(self.__db_path) as db:
             await db.execute(
@@ -28,6 +30,7 @@ class SqliteTodoRepository(TodoRepository):
             )
             await db.commit()
 
+    @override
     async def delete(self, id: UUID) -> Result[Todo, TodoNotFoundError]:
         async with aiosqlite.connect(self.__db_path) as db:
             parameters = {"id": str(id)}
@@ -61,6 +64,7 @@ class SqliteTodoRepository(TodoRepository):
                     None,
                 )
 
+    @override
     async def get(self, id: UUID) -> Result[Todo, TodoNotFoundError]:
         async with aiosqlite.connect(self.__db_path) as db:
             parameters = {"id": str(id)}
@@ -92,6 +96,7 @@ class SqliteTodoRepository(TodoRepository):
                     None,
                 )
 
+    @override
     async def get_all(self) -> Sequence[Todo]:
         result: list[Todo] = []
         async with aiosqlite.connect(self.__db_path) as db:

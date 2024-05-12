@@ -1,30 +1,50 @@
 from collections.abc import Sequence
-from typing import Dict, Optional
+from datetime import datetime
+from typing import override
+from uuid import UUID
 
-from ..entity import Entity, Todo
-from .repository import Repository
+from todo.entity.todo import Todo
+from todo.repository.todo_repository import Result, TodoNotFoundError, TodoRepository
 
 
-class InMemoryTodoRepository(Repository[Todo]):
-    __data: Dict[str, Todo]
+class InMemoryTodoRepository(TodoRepository):
+    def __init__(self) -> None:
+        self.__data = dict[UUID, Todo]()
 
-    @classmethod
-    def create(cls) -> "InMemoryTodoRepository":
-        repo = cls()
-        repo.__data = {}
-        return repo
+    @override
+    async def save(self, todo: Todo) -> None:
+        self.__data[todo.id] = todo
 
-    async def save(self, entity: Entity[Todo]) -> None:
-        self.__data[entity.id] = entity.data
+    @override
+    async def delete(self, id: UUID) -> Result[Todo, TodoNotFoundError]:
+        if id not in self.__data:
+            return (
+                Todo(
+                    UUID("00000000-0000-0000-0000-000000000000"),
+                    "",
+                    False,
+                    datetime(year=1, month=1, day=1),
+                    datetime(year=1, month=1, day=1),
+                ),
+                TodoNotFoundError(),
+            )
+        return self.__data.pop(id), None
 
-    async def remove(self, id: str) -> Optional[Entity[Todo]]:
-        if id in self.__data:
-            return Entity.create(self.__data.pop(id), id=id)
+    @override
+    async def get(self, id: UUID) -> Result[Todo, TodoNotFoundError]:
+        if id not in self.__data:
+            return (
+                Todo(
+                    UUID("00000000-0000-0000-0000-000000000000"),
+                    "",
+                    False,
+                    datetime(year=1, month=1, day=1),
+                    datetime(year=1, month=1, day=1),
+                ),
+                TodoNotFoundError(),
+            )
+        return self.__data[id], None
 
-    async def get_by_id(self, id: str) -> Optional[Entity[Todo]]:
-        if id in self.__data:
-            return Entity.create(self.__data[id], id=id)
-
-    async def get_all(self) -> Sequence[Entity[Todo]]:
-        entities = (Entity.create(todo, id=id) for id, todo in self.__data.items())
-        return tuple(entities)
+    @override
+    async def get_all(self) -> Sequence[Todo]:
+        return tuple(self.__data.values())
