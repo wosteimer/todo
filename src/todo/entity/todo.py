@@ -1,18 +1,28 @@
+from __future__ import annotations
 from dataclasses import dataclass, replace
-from datetime import datetime
+from datetime import datetime, timezone
+from typing import TypedDict, Unpack
+from uuid import UUID, uuid4
+
+
+class UpdateProps(TypedDict, total=False):
+    content: str
+    its_done: bool
 
 
 @dataclass(slots=True, frozen=True)
 class Todo:
-    text: str
-    created_at: str
-    updated_at: str
-    its_done: bool = False
+    id: UUID
+    content: str
+    its_done: bool
+    created_at: datetime
+    updated_at: datetime
 
+    @classmethod
+    def create(cls, content: str) -> Todo:
+        id = uuid4()
+        now = datetime.now(timezone.utc)
+        return cls(id, content, False, now, now)
 
-def set_its_done(todo: Todo, its_done: bool) -> "Todo":
-    return replace(
-        todo,
-        its_done=its_done,
-        updated_at=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-    )
+    def update(self, **props: Unpack[UpdateProps]) -> Todo:
+        return replace(self, **props, updated_at=datetime.now(timezone.utc))
