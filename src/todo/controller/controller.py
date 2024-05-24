@@ -1,11 +1,3 @@
-from abc import ABC, abstractmethod
-from typing import Generic, TypeVar
+from collections.abc import Awaitable, Callable
 
-_T = TypeVar("_T")
-_R = TypeVar("_R")
-
-
-class Controller(ABC, Generic[_T, _R]):
-    @abstractmethod
-    async def perform(self, request: _T) -> _R:
-        ...
+type Controller[T, R] = Callable[[T], Awaitable[R]]

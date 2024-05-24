@@ -1,10 +1,12 @@
 from collections.abc import Sequence
-from datetime import datetime
 from typing import override
 from uuid import UUID
 
+from returns import Err, Ok, Result
+
 from ..entity.todo import Todo
-from ..repository.todo_repository import Result, TodoNotFoundError, TodoRepository
+from ..errors import TodoNotFoundError
+from .todo_repository import TodoRepository
 
 
 class InMemoryTodoRepository(TodoRepository):
@@ -18,32 +20,14 @@ class InMemoryTodoRepository(TodoRepository):
     @override
     async def delete(self, id: UUID) -> Result[Todo, TodoNotFoundError]:
         if id not in self.__data:
-            return (
-                Todo(
-                    UUID("00000000-0000-0000-0000-000000000000"),
-                    "",
-                    False,
-                    datetime(year=1, month=1, day=1),
-                    datetime(year=1, month=1, day=1),
-                ),
-                TodoNotFoundError(),
-            )
-        return self.__data.pop(id), None
+            return Err(TodoNotFoundError())
+        return Ok(self.__data.pop(id))
 
     @override
     async def get(self, id: UUID) -> Result[Todo, TodoNotFoundError]:
         if id not in self.__data:
-            return (
-                Todo(
-                    UUID("00000000-0000-0000-0000-000000000000"),
-                    "",
-                    False,
-                    datetime(year=1, month=1, day=1),
-                    datetime(year=1, month=1, day=1),
-                ),
-                TodoNotFoundError(),
-            )
-        return self.__data[id], None
+            return Err(TodoNotFoundError())
+        return Ok(self.__data[id])
 
     @override
     async def get_all(self) -> Sequence[Todo]:

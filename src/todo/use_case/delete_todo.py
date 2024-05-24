@@ -1,7 +1,10 @@
 from typing import TypedDict, Unpack
 from uuid import UUID
 
-from ..repository.todo_repository import TodoRepository, TodoNotFoundError
+from returns import Err, Ok, Result
+
+from ..errors import TodoNotFoundError
+from ..repository.todo_repository import TodoRepository
 
 
 class Input(TypedDict):
@@ -14,20 +17,17 @@ class Output(TypedDict):
     its_done: bool
 
 
-type = Result = tuple[Output, TodoNotFoundError | None]
-
-
 class DeleteTodo:
     def __init__(self, todos: TodoRepository):
         self.__todos = todos
 
-    async def perform(self, **input: Unpack[Input]) -> Result:
+    async def perform(
+        self, **input: Unpack[Input]
+    ) -> Result[Output, TodoNotFoundError]:
         id = input["id"]
-        todo, err = await self.__todos.delete(id)
-        if err != None:
-            return {
-                "id": UUID("00000000-0000-0000-0000-000000000000"),
-                "content": "",
-                "its_done": False,
-            }, err
-        return {"id": todo.id, "content": todo.content, "its_done": todo.its_done}, err
+        result = await self.__todos.delete(id)
+        # fmt: off
+        match result:
+            case Ok(todo): return Ok({"id": todo.id, "content": todo.content, "its_done": todo.its_done})
+            case Err(err): return Err(err) 
+        # fmt: on

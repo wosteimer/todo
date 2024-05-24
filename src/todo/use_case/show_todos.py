@@ -11,14 +11,11 @@ class Output(TypedDict):
     its_done: bool
 
 
-type Result = Sequence[Output]
-
-
 class ShowTodos:
     def __init__(self, todos: TodoRepository) -> None:
         self.__todos = todos
 
-    async def perform(self) -> Result:
+    async def perform(self) -> Sequence[Output]:
         todos = await self.__todos.get_all()
         return [
             {"id": todo.id, "content": todo.content, "its_done": todo.its_done}

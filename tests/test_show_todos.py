@@ -10,7 +10,7 @@ async def test_case_1():
     """It must be possible to get all todos"""
     todos = InMemoryTodoRepository()
     for i in range(3):
-        todo = Todo.create(f"Test Todo {i}")
+        todo = Todo.create(f"Test Todo {i}").unwrap()
         await todos.save(todo)
     case = ShowTodos(todos)
     output = await case.perform()

@@ -10,7 +10,8 @@ async def test_case_1():
     todos = InMemoryTodoRepository()
     case = CreateTodo(todos)
     input = {"content": "Todo Test"}
-    output = await case.perform(**input)
+    result = await case.perform(**input)
+    output = result.unwrap()
 
     assert "id" in output
     assert "content" in output

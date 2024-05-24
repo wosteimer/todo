@@ -1,7 +1,12 @@
+import asyncio
 from typing import Required, TypedDict, Unpack
 from uuid import UUID
 
-from todo.repository.todo_repository import TodoNotFoundError, TodoRepository
+from returns import Err, Ok, Result
+
+from todo.repository.todo_repository import TodoRepository
+
+from ..errors import InvalidContentError, TodoNotFoundError
 
 
 class Input(TypedDict, total=False):
@@ -16,30 +21,28 @@ class Output(TypedDict):
     its_done: bool
 
 
-type Result = tuple[Output, TodoNotFoundError | None]
-
-
 class UpdateTodo:
     def __init__(self, todos: TodoRepository) -> None:
         self.__todos = todos
 
-    async def perform(self, **input: Unpack[Input]) -> Result:
+    async def perform(
+        self, **input: Unpack[Input]
+    ) -> Result[Output, TodoNotFoundError | InvalidContentError]:
         id = input["id"]
-        todo, err = await self.__todos.get(id)
-        if err != None:
-            return {
-                "id": UUID("00000000-0000-0000-0000-000000000000"),
-                "content": "",
-                "its_done": False,
-            }, err
-        content, its_done = (
-            input.get("content", todo.content),
-            input.get("its_done", todo.its_done),
-        )
-        updated_todo = todo.update(content=content, its_done=its_done)
-        await self.__todos.save(updated_todo)
-        return {
-            "id": updated_todo.id,
-            "content": updated_todo.content,
-            "its_done": updated_todo.its_done,
-        }, None
+        result = await self.__todos.get(id)
+        # fmt: off
+        match result:
+            case Err(err): return Err(err)
+            case Ok(todo): 
+                content, its_done = input.get("content", todo.content), input.get("its_done", todo.its_done),
+                result = todo.update(content=content, its_done=its_done)
+                if result.is_err():
+                    return Err(InvalidContentError())
+                updated_todo = result.unwrap()
+                asyncio.create_task(self.__todos.save(updated_todo))
+                return Ok({
+                    "id": updated_todo.id,
+                    "content": updated_todo.content,
+                    "its_done": updated_todo.its_done,
+                })
+        # fmt: on

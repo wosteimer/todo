@@ -1,9 +1,11 @@
+import asyncio
 from typing import TypedDict, Unpack
 from uuid import UUID
 
-from ..repository.todo_repository import TodoRepository
+from returns import Err, Ok, Result
 
-from ..entity import Todo
+from ..entity.todo import InvalidContentError, Todo
+from ..repository.todo_repository import TodoRepository
 
 
 class Input(TypedDict):
@@ -20,9 +22,15 @@ class CreateTodo:
     def __init__(self, todos: TodoRepository) -> None:
         self.__todos = todos
 
-    async def perform(self, **input: Unpack[Input]) -> Output:
+    async def perform(
+        self, **input: Unpack[Input]
+    ) -> Result[Output, InvalidContentError]:
         content = input["content"]
-        todo = Todo.create(content)
-        await self.__todos.save(todo)
-
-        return {"id": todo.id, "content": todo.content, "its_done": todo.its_done}
+        result = Todo.create(content)
+        # fmt:off
+        match result:
+            case Err(err): return Err(err)
+            case Ok(todo):
+                asyncio.create_task(self.__todos.save(todo))
+                return Ok({"id": todo.id, "content": todo.content, "its_done": todo.its_done})
+        # fmt:on

@@ -1,13 +1,14 @@
 from __future__ import annotations
+
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
-from todo.entity.todo import Todo
 from uuid import UUID
 
-type Result[T, E: Exception] = tuple[T, E | None]
+from returns import Result
 
+from todo.entity.todo import Todo
 
-class TodoNotFoundError(Exception): ...
+from ..errors import TodoNotFoundError
 
 
 class TodoRepository(ABC):

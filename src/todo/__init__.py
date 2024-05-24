@@ -4,7 +4,7 @@ from pathlib import Path
 from starlette.applications import Starlette
 from starlette.config import Config
 
-from .repository.sqlite_todo_repository import SqliteTodoRepository
+from .repository.sqlite_todo_repository import SqlitePool, SqliteTodoRepository
 from .routes import create_routes
 
 config = Config(".env")
@@ -15,8 +15,10 @@ STATIC_FILES_DIRECTORY = str(Path(__file__).parent / "static")
 
 @asynccontextmanager
 async def lifespan(_: Starlette):
-    todos = SqliteTodoRepository(DATABASE_URL)
-    yield {"todos": todos}
+    pool = SqlitePool()
+    await pool.connect(DATABASE_URL)
+    yield {"todos": SqliteTodoRepository(pool)}
+    await pool.close()
 
 
 def main():
