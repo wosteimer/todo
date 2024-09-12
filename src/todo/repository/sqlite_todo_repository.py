@@ -127,5 +127,6 @@ class SqliteTodoRepository(TodoRepository):
                     )
                     async for id, content, its_done, created_at, updated_at in cursor
                 ])
-        finally: await self.__pool.put(db)
+        finally: 
+            await self.__pool.put(db)
         # fmt:on

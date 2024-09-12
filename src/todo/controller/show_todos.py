@@ -3,11 +3,10 @@ from collections.abc import Sequence
 from starlette.requests import Request
 from starlette.responses import HTMLResponse, Response
 
-from todo.repository.todo_repository import TodoRepository
-from todo.template.components.todo import TodoProps
-from todo.use_case.show_todos import ShowTodos
-
+from ..repository.todo_repository import TodoRepository
+from ..template.components.todo import TodoProps
 from ..template.pages.home import Home
+from ..use_case.show_todos import ShowTodos
 
 
 async def show_todos(request: Request) -> Response:

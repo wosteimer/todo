@@ -2,7 +2,7 @@ from collections.abc import Sequence
 from typing import TypedDict
 from uuid import UUID
 
-from todo.repository.todo_repository import TodoRepository
+from ..repository.todo_repository import TodoRepository
 
 
 class Output(TypedDict):

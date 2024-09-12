@@ -27,10 +27,14 @@ class CreateTodo:
     ) -> Result[Output, InvalidContentError]:
         content = input["content"]
         result = Todo.create(content)
-        # fmt:off
         match result:
-            case Err(err): return Err(err)
+            case Err(err):
+                return Err(err)
             case Ok(todo):
                 asyncio.create_task(self.__todos.save(todo))
-                return Ok({"id": todo.id, "content": todo.content, "its_done": todo.its_done})
-        # fmt:on
+                output: Output = {
+                    "id": todo.id,
+                    "content": todo.content,
+                    "its_done": todo.its_done,
+                }
+                return Ok(output)

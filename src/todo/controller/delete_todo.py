@@ -4,8 +4,8 @@ from returns import Err, Ok
 from starlette.requests import Request
 from starlette.responses import HTMLResponse, Response
 
-from todo.repository.todo_repository import TodoRepository
-from todo.use_case.delete_todo import DeleteTodo
+from ..repository.todo_repository import TodoRepository
+from ..use_case.delete_todo import DeleteTodo
 
 
 async def delete_todo(request: Request) -> Response:

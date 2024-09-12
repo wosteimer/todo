@@ -1,7 +1,7 @@
 from starlette.requests import Request
 from starlette.responses import HTMLResponse, Response
 
-from todo.template.components.modal import Modal
+from ..template.components.modal import Modal
 
 
 async def show_modal(request: Request) -> Response:

@@ -6,8 +6,7 @@ from uuid import UUID
 
 from returns import Result
 
-from todo.entity.todo import Todo
-
+from ..entity.todo import Todo
 from ..errors import TodoNotFoundError
 
 

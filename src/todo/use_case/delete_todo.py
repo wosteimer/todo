@@ -26,8 +26,13 @@ class DeleteTodo:
     ) -> Result[Output, TodoNotFoundError]:
         id = input["id"]
         result = await self.__todos.delete(id)
-        # fmt: off
         match result:
-            case Ok(todo): return Ok({"id": todo.id, "content": todo.content, "its_done": todo.its_done})
-            case Err(err): return Err(err) 
-        # fmt: on
+            case Ok(todo):
+                output: Output = {
+                    "id": todo.id,
+                    "content": todo.content,
+                    "its_done": todo.its_done,
+                }
+                return Ok(output)
+            case Err(err):
+                return Err(err)
